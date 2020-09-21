@@ -351,7 +351,6 @@ class Worker
                 $this->updateProcLine('Job: processing '.$job->getQueue().'#'.$job->getId().' since '.strftime('%F %T'));
 
                 $this->perform($job);
-                exit(0);
             }
 
             $this->child = null;
