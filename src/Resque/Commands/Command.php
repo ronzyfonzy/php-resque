@@ -47,6 +47,7 @@ class Command extends \Symfony\Component\Console\Command\Command
         'port'           => 'redis.port',
         'namespace'      => 'redis.namespace',
         'password'       => 'redis.password',
+        'predis'         => 'predis',
         'verbose'        => 'default.verbose',
         'queue'          => 'default.jobs.queue',
         'delay'          => 'default.jobs.delay',
@@ -84,6 +85,7 @@ class Command extends \Symfony\Component\Console\Command\Command
                 new InputOption('scheme', null, InputOption::VALUE_REQUIRED, 'The Redis scheme to use.', Resque\Redis::DEFAULT_SCHEME),
                 new InputOption('namespace', null, InputOption::VALUE_REQUIRED, 'The Redis namespace to use. This is prefixed to all keys.', Resque\Redis::DEFAULT_NS),
                 new InputOption('password', null, InputOption::VALUE_OPTIONAL, 'The Redis AUTH password.'),
+                new InputOption('predis', null, InputOption::VALUE_OPTIONAL, 'Predis configuration'),
                 new InputOption('log', null, InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, 'Specify the handler(s) to use for logging.'),
                 new InputOption('events', 'e', InputOption::VALUE_NONE, 'Outputs all events to the console, for debugging.'),
             )
@@ -111,7 +113,8 @@ class Command extends \Symfony\Component\Console\Command\Command
             'host'      => $config['host'],
             'port'      => $config['port'],
             'namespace' => $config['namespace'],
-            'password'  => $config['password']
+            'password'  => $config['password'],
+            'predis'    => $config['predis']
         ));
 
         // Set the verbosity
