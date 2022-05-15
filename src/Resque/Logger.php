@@ -81,14 +81,20 @@ class Logger
     protected $instance = null;
 
     /**
+     * @var array
+     */
+    protected $context = null;
+
+    /**
      * Create a Monolog\Logger instance and attach a handler
      *
      * @see    https://github.com/Seldaek/monolog#handlers Monolog handlers documentation
      * @param array $handlers Array of Monolog handlers
      */
-    public function __construct(array $handlers)
+    public function __construct(array $handlers, array $context = null)
     {
         $this->instance = new \Monolog\Logger('resque');
+        $this->context  = $context;
 
         foreach ($handlers as $handler) {
             $this->instance->pushHandler($handler);
@@ -103,6 +109,14 @@ class Logger
     public function getInstance()
     {
         return $this->instance;
+    }
+
+    /**
+     * @param array $context
+     */
+    public function setContext(array $context)
+    {
+        $this->context = $context;
     }
 
     /**
@@ -122,6 +136,10 @@ class Logger
 
         if (!is_array($context)) {
             $context = is_null($context) ? array() : array($context);
+        }
+
+        if (!is_null($this->context)) {
+            $context = array_merge($this->context, $context);
         }
 
         if (!is_int($logType)) {
