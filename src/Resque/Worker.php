@@ -171,12 +171,28 @@ class Worker
      *
      * @param  string $id     Worker id
      * @param  Logger $logger Logger for the worker to use
-     * @return Worker
+     * @return Worker|false
      */
     public static function fromId($id, Logger $logger = null)
     {
         if (!$id or !count($packet = Redis::instance()->hgetall(self::redisKey($id)))) {
             return false;
+        }
+
+        $check_keys = [
+            'queues',
+            'blocking',
+            'pid',
+            'interval',
+            'timeout',
+            'memory_limit',
+            'hostname',
+        ];
+
+        foreach ($check_keys as $check_key) {
+            if (!isset($packet[$check_key])) {
+                return false;
+            }
         }
 
         $worker = new static(explode(',', $packet['queues']), $packet['blocking']);
